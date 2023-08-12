@@ -1,0 +1,33 @@
+CREATE TABLE out_of_stock (itemID INTEGER PRIMARY KEY, name TEXT, size TEXT, type TEXT, color TEXT, price INTEGER);
+
+    INSERT INTO out_of_stock VALUES (1, "Forever Young T-shirt", "M", "womens shirts", "yellow", 30);
+    INSERT INTO out_of_stock VALUES (2, "OHIO Oversized Hoodie", NULL,"unisex shirts", "gray", 50);
+    INSERT INTO out_of_stock VALUES (3, "Distressed Low Rise Jeans", "L","womens pants", "denim blue", 65);
+    INSERT INTO out_of_stock VALUES (4, "Anti-Social Friends Club T-shirt", "M", "womens shirts", "mint", 25);
+    INSERT INTO out_of_stock VALUES (5, "Shrimp Lips trucker hat", NULL, "hats", "pink", 20);
+    INSERT INTO out_of_stock VALUES (6, "Penn Beach T-shirt", "L", "womens shirts", "white", 24);
+    INSERT INTO out_of_stock VALUES (7, "Vote 4 Pedro T-shirt", "S", "womens shirts", "white", 28);
+    INSERT INTO out_of_stock VALUES (8, "Black skinny jeans", "L", "womens pants", "black", 60);
+    INSERT INTO out_of_stock VALUES (9, "Grange long sleeve", "L", "womens shirts", "white", 35);
+    INSERT INTO out_of_stock VALUES (10, "Long Live A$AP", "L", "womens shirts", "red", 50);
+    INSERT INTO out_of_stock VALUES (11, "Cargo pants", "L", "womens pants", "green", 50);
+    INSERT INTO out_of_stock VALUES (12, "Barbie cowgirl hat", NULL, "hats", "pink", 40);
+    INSERT INTO out_of_stock VALUES (13, "Baywatch tanktop", "S", "womens shirts", "white", 25);
+    INSERT INTO out_of_stock VALUES (14, "THE WORLD IS YOURS T-shirt", "L", "womens shirts", "black", 45);
+    INSERT INTO out_of_stock VALUES (15, "C.R.E.A.M. T-shirt", "L", "womens shirts", "white", 34);
+
+SELECT * FROM out_of_stock;
+
+-- Use Case Scenario
+-- Display the out of stock inventory in order of price (least to most expensive).
+
+    SELECT * FROM out_of_stock ORDER BY price;
+
+-- What is the average price of by clothing type?
+
+   SELECT round(AVG(price)) AS avg_price, type FROM out_of_stock GROUP BY type;
+
+-- What are the 5 most expensive out of stock items?
+    
+    SELECT * FROM out_of_stock ORDER BY price DESC LIMIT 5;
+  
