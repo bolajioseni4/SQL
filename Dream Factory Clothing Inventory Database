@@ -23,7 +23,7 @@ SELECT * FROM out_of_stock;
 
     SELECT * FROM out_of_stock ORDER BY price;
 
--- What is the average price of by clothing type?
+-- What is the average price for each clothing type?
 
    SELECT round(AVG(price)) AS avg_price, type FROM out_of_stock GROUP BY type;
 
