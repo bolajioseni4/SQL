@@ -1,0 +1,118 @@
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL);
+
+-- Popularity - The higher the value the more popular the song is
+-- Danceability - The higher the value, the easier it is to dance to this song
+-- Energy - The energy of a song - the higher the value, the more energtic the song
+-- Key - the key the track is in. Integers map to pitches using standard Pitch Class notation. E.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1 (range: -1; 11)
+-- Loudness (dB) - The higher the value, the louder the song
+-- Mode - indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0
+-- Speechiness - The higher the value the more spoken word the song contains
+-- Acousticness - The higher the value the more acoustic the song is
+-- Instrumentalness - the number of vocals in a song. The closer the value to 1.0, the more instrumental the song is
+-- Liveness - The higher the value, the more likely the song is a live recording
+-- Valence - The higher the value, the more positive mood for the song
+-- Tempo - The overall estimated tempo of a track in beats per minute (BPM)
+-- Duration - Duration of the song in ms
+-- Time signature - An estimated time signature. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure). The time signature ranges from 3 to 7 indicating time signatures of "3/4", to "7/4"
+
+
+SELECT * 
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC;
+
+-- What is the distribution of track popularity in the dataset? Are there any highly popular or unpopular tracks?
+SELECT artist_name, track_name, popularity
+FROM Spotifydata
+ORDER BY popularity DESC
+LIMIT 2;
+
+SELECT artist_name, track_name, popularity
+FROM Spotifydata
+ORDER BY popularity
+LIMIT 2;
+-- The most popular songs in the dataset include good 4 u x Olivia Rodrigo, Bad Habits x Ed Sheeran, and Woman x Doja Cat (95/100). The least popular song in the top 50 list is Dynamite x BTS (67/100)
+
+-- Which artist has the most tracks in the dataset?
+SELECT artist_name, COUNT(artist_name) as num_of_songs
+FROM Spotifydata
+GROUP BY artist_name
+HAVING num_of_songs >= 2
+ORDER BY num_of_songs DESC
+LIMIT 10;
+-- Olivia Rodrigo and Doja Cat (4 tracks each)
+
+-- What is the average danceability and energy level of the tracks in the dataset?
+SELECT AVG(danceability) AS avg_dance, AVG(energy) AS avg_energy
+FROM BIT_DB.Spotifydata;
+-- avg danceability = 0.686; avg energy = 0.646
+
+-- What are the most common song keys in the dataset?
+SELECT song_key, COUNT(song_key) AS songs_with_key
+FROM Spotifydata
+GROUP BY song_key
+HAVING songs_with_key > 1
+ORDER BY songs_with_key DESC;
+-- The most common song keys are 1, 8, and 0.
+
+-- What is the distribution of loudness across the tracks?
+SELECT artist_name, track_name, loudness
+FROM Spotifydata
+ORDER BY loudness DESC;
+-- The songs loudness scores range from -2.81 (Sweater Weather x The Neighbourhood) to -11.639 (Duncan Laurence x Arcade).
+
+-- What is the range of speechiness (presence of spoken words) in the dataset?
+SELECT track_name, speechiness
+FROM Spotifydata
+ORDER BY speechiness DESC;
+-- 0.286 to 0.0284
+
+-- What is the distribution of instrumentalness (absence of vocals) in the dataset?
+SELECT artist_name, track_name, instrumentalness
+FROM Spotifydata
+ORDER BY instrumentalness DESC;
+-- The instrumentalness of each song ranges from 0 (likely live recordings)to 0.0382 (slightly more instrumental than vocal).
+
+-- What is the average valence (musical positiveness) of the tracks?
+SELECT AVG(valence)
+FROM Spotifydata;
+-- 0.529
+
+-- What is the distribution of tempo across the tracks?
+SELECT artist_name, track_name, tempo
+FROM Spotifydata
+ORDER BY tempo DESC;
+-- The track tempo listed in this dataset range from 72.017 to 180.917 (beats per min).
+
+-- What is the distribution of track durations in the dataset?
+SELECT artist_name, track_name, (duration_ms/60000) AS song_min
+FROM Spotifydata
+ORDER BY duration_ms;
+-- The songs range from about 2 to 4 minutes (132780ms to 287120ms).
+
+-- Calculate the average popularity for the artists in the Spotify data table. Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.
+WITH top_star AS 
+(SELECT artist_name, AVG(popularity) AS avg_pop, *
+FROM Spotifydata
+GROUP BY artist_name
+HAVING avg_pop >= 90
+ORDER BY avg_pop DESC)
+SELECT artist_name, avg_pop FROM top_star;
+-- Using a CTE, I created a temp table named top_star to identify the artists who have an average popularity score of 90 or above. I grouped the popularity scores by artist in the inner query and select their name and average scores in the outer query.
